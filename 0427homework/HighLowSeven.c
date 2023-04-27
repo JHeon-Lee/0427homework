@@ -11,9 +11,7 @@ typedef struct Cards
 }Cards;
 
 void InitCards(Cards* cards);
-//void Surffle(Cards* cards);
-void GamePlay(Cards* cards, bool open, int* count, int* money);
-void Result(Cards* cards);
+void GamePlay(Cards* cards, int* count, int* money);
 
 int main()
 {
@@ -24,25 +22,39 @@ int main()
 	int CardCount = 0;
 	Cards cards[52];
 	bool isContinue = true;
-	bool opencard = false;
 
 
 	InitCards(cards);
 
 
-	while (Money > 0)
+	while (isContinue)
 	{
 		system("cls");
 
 		printf("※※※ Welcome to High Low Seven Game!! ※※※\n\n");
 
-		while (isContinue)
-		{
-			GamePlay(cards, opencard, &CardCount, &Money);
+		printf("현재 보유 금액 : %d\n\n", Money);
 
-			break;
+		GamePlay(cards, &CardCount, &Money);
+
+		if (CardCount == 8)
+		{
+			printf("새로운 카드 52장으로 진행합니다.\n");
+			printf("카드섞는중..");
+			Sleep(1500);
+			printf("..");
+			Sleep(1500);
+			printf("..");
+			Sleep(1500);
+			printf("..\n");
+			InitCards(cards);
 		}
-		break;
+
+		if (Money < 2000)
+		{
+			printf("이런! 베팅할 돈이 없네요.. 게임이 종료됩니다.\n");
+			isContinue = false;
+		}
 	}
 
 
@@ -61,20 +73,7 @@ void InitCards(Cards* cards)
 	}
 }
 
-//void Surffle(Cards* cards)
-//{
-//	for (int i = 0; i < 200; i++)
-//	{
-//		int src = rand() % 52;
-//		int dest = rand() % 52;
-//
-//		Cards temp = cards[src];
-//		cards[src] = cards[dest];
-//		cards[dest] = temp;
-//	}
-//}
-
-void GamePlay(Cards* cards, bool open, int* count, int* money)
+void GamePlay(Cards* cards, int* count, int* money)
 {
 	int num;
 	int bet;
@@ -96,60 +95,59 @@ void GamePlay(Cards* cards, bool open, int* count, int* money)
 
 	for (int i = 0; i < 6; i++)
 	{
-		switch (cards[random_nums[i]].shape)
-		{
-		case 0:
-			printf("♠");
-			break;
-		case 1:
-			printf("♥");
-			break;
-		case 2:
-			printf("◆");
-			break;
-		case 3:
-			printf("♣");
-			break;
-		}
-		switch (cards[random_nums[i]].num)
-		{
-		case 1:
-			printf("A\t");
-			break;
-		case 11:
-			printf("J\t");
-			break;
-		case 12:
-			printf("Q\t");
-			break;
-		case 13:
-			printf("K\t");
-			break;
-		default:
-			printf("%d\t", cards[random_nums[i]].num);
-			break;
-		}
-		if (i == 5 && open == false)
+		if (i == 5)
 		{
 			printf("??\t");
 		}
-		else if (i == 5 && open == true)
+		else
 		{
-			continue;
+			switch (cards[random_nums[i]].shape)
+			{
+			case 0:
+				printf("♠");
+				break;
+			case 1:
+				printf("♥");
+				break;
+			case 2:
+				printf("◆");
+				break;
+			case 3:
+				printf("♣");
+				break;
+			}
+			switch (cards[random_nums[i]].num)
+			{
+			case 1:
+				printf("A\t");
+				break;
+			case 11:
+				printf("J\t");
+				break;
+			case 12:
+				printf("Q\t");
+				break;
+			case 13:
+				printf("K\t");
+				break;
+			default:
+				printf("%d\t", cards[random_nums[i]].num);
+				break;
+			}
 		}
 	}
 	printf("\n\n");
-	(*count)++;
 	
 	printf("베팅액을 적어주세요. (최소 2000원) : ");
 	scanf_s("%d", &bet);
-	while (bet > money || bet < 2000)
+	while (bet > *money || bet < 2000)
 	{
 		printf("제대로 베팅하세요.\n");
 		Sleep(2000);
 		printf("베팅액을 적어주세요. (최소 2000원) : ");
 		scanf_s("%d", &bet);
 	}
+	printf("\n");
 
 	printf("1. High 2. Low 3. Seven : ");
 	scanf_s("%d", &num);
@@ -160,12 +158,66 @@ void GamePlay(Cards* cards, bool open, int* count, int* money)
 		printf("1. High 2. Low 3. Seven : ");
 		scanf_s("%d", &num);
 	}
-
-	open = true;
+	printf("\n");
 
 	if (cards[random_nums[5]].num > 7 && num == 1)
 	{
-		
+		printf("승리했습니다!\n");
+		*money += bet;
+	}
+	else if (cards[random_nums[5]].num < 7 && num == 2)
+	{
+		printf("승리했습니다!\n");
+		*money += bet;
+	}
+	else if (cards[random_nums[5]].num == 7 && num == 3)
+	{
+		printf("Seven으로 승리했습니다!\n");
+		*money += (bet * 13);
+	}
+	else
+	{
+		printf("졌습니다...\n");
+		*money -= bet;
 	}
 
+	printf("히든 카드 : ");
+	switch (cards[random_nums[5]].shape)
+	{
+	case 0:
+		printf("♠");
+		break;
+	case 1:
+		printf("♥");
+		break;
+	case 2:
+		printf("◆");
+		break;
+	case 3:
+		printf("♣");
+		break;
+	}
+	switch (cards[random_nums[5]].num)
+	{
+	case 1:
+		printf("A\t");
+		break;
+	case 11:
+		printf("J\t");
+		break;
+	case 12:
+		printf("Q\t");
+		break;
+	case 13:
+		printf("K\t");
+		break;
+	default:
+		printf("%d\t", cards[random_nums[5]].num);
+		break;
+	}
+
+	(*count)++;
+
+	Sleep(2000);
+	printf("\n");
 }
