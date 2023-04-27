@@ -23,9 +23,7 @@ int main()
 	Cards cards[52];
 	bool isContinue = true;
 
-
 	InitCards(cards);
-
 
 	while (isContinue)
 	{
@@ -56,8 +54,6 @@ int main()
 			isContinue = false;
 		}
 	}
-
-
 	return 0;
 }
 
