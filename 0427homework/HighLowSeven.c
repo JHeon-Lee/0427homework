@@ -222,15 +222,14 @@ void GamePlay(Cards* cards, int* count, int* money)
 		cards[random_nums[i]].num = 0;
 	}
 
-	for (int i = 0; i < 4; i++)
-	{
-		for (int j = 0; j < 13; j++)
-		{
-			printf("%d\t", cards[j + i * 13].num);
-		}
-		printf("\n");
-	}
-
+	//for (int i = 0; i < 4; i++)
+	//{
+	//	for (int j = 0; j < 13; j++)
+	//	{
+	//		printf("%d\t", cards[j + i * 13].num);
+	//	}
+	//	printf("\n");
+	//}
 
 	(*count)++;
 
