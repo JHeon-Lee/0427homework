@@ -232,6 +232,7 @@ void MainGame()
 							{
 								printf("축하합니다!! %s 을(를) 물리쳤습니다!! 던전에서 탈출합니다.\n\n", monster[i].mName);
 								isContinue = false;
+								break;
 							}
 							printf("엔터를 눌러 계속 진행.\n\n");
 							break;
@@ -250,6 +251,15 @@ void MainGame()
 						Sleep(1000);
 						printf("플레이어의 체력 : %d/%d\n", player.pCurrHp, player.pMaxHp);
 						Sleep(1000);
+						if (player.pCurrHp < 1) // 플레이어 체력이 0 이하가 된 경우
+						{
+							printf("Hp가 다 떨어졌습니다.. 힘이 빠집니다...\n\n");
+							Sleep(1000);
+							printf("Game Over\n\n");
+							Sleep(1000);
+							isContinue = false;
+							break;
+						}
 					}
 				}
 			}
@@ -300,6 +310,14 @@ void MainGame()
 							Sleep(1000);
 							player.pCurrHp -= hiddenbox[i].hAtk - player.pDef;
 						}
+						if (player.pCurrHp < 1) // 플레이어 체력이 0 이하가 된 경우
+						{
+							printf("Hp가 다 떨어졌습니다.. 힘이 빠집니다...\n\n");
+							Sleep(1000);
+							printf("Game Over\n\n");
+							Sleep(1000);
+							isContinue = false;
+						}
 						break;
 					}
 					case 1:
@@ -325,15 +343,6 @@ void MainGame()
 					Sleep(1000);
 					printf("엔터를 눌러 계속 진행.\n\n");
 				}
-			}
-
-			if (player.pCurrHp < 1) // 플레이어 체력이 0 이하가 된 경우
-			{
-				printf("Hp가 다 떨어졌습니다.. 힘이 빠집니다...\n\n");
-				Sleep(1000);
-				printf("Game Over\n\n");
-				Sleep(1000);
-				isContinue = false;
 			}
 		}
 	}

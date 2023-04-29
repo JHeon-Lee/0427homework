@@ -46,6 +46,7 @@ int main()
 			Sleep(1500);
 			printf("..\n");
 			InitCards(cards);
+			CardCount = 0;
 		}
 
 		if (Money < 2000)
@@ -63,7 +64,7 @@ void InitCards(Cards* cards)
 	{
 		for (int j = 0; j < 13; j++)
 		{
-			cards[i * 13 + j].num = j;
+			cards[i * 13 + j].num = j + 1;
 			cards[i * 13 + j].shape = i;
 		}
 	}
@@ -77,9 +78,13 @@ void GamePlay(Cards* cards, int* count, int* money)
 	for (int i = 0; i < 6; i++)
 	{
 		random_nums[i] = rand() % 52;
+		if (cards[random_nums[i]].num == 0)
+		{
+			i--;
+		}
 		for (int j = 0; j < i; j++)
 		{
-			if (random_nums[i] == random_nums[j] || cards[random_nums[i]].num == 0)
+			if (random_nums[i] == random_nums[j])
 			{
 				i--;
 				break;
@@ -208,9 +213,24 @@ void GamePlay(Cards* cards, int* count, int* money)
 		printf("K\t");
 		break;
 	default:
-		printf("%d\t", cards[random_nums[5]].num);
+		printf("%d\t\n\n", cards[random_nums[5]].num);
 		break;
 	}
+
+	for (int i = 0; i < 6; i++)
+	{
+		cards[random_nums[i]].num = 0;
+	}
+
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 13; j++)
+		{
+			printf("%d\t", cards[j + i * 13].num);
+		}
+		printf("\n");
+	}
+
 
 	(*count)++;
 
